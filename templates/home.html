@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+
+  <!-- Make it compatible to mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Craigslist Market Rent Prediction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+  <script src='https://cdn.plot.ly/plotly-2.18.2.min.js'></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/script.js') }}"></script>
+</head>
+<h1 class="appname textclr">Craigslist Market Rent Prediction</h1>
+<main class="login">
+
+  <!-- Action is where the data is sent. In our case, predict page.
+If action is omitted, it assumed to be the current page -->
+  <form id="form">
+    <!-- Metro-->
+
+    <!--<form name="form1" id="form1" action="/action_page.php">-->
+
+    <p class="question textclr">Location?</p>
+    Metro: <select name="subject" id="subject">
+      <option value="" selected="selected">Select metro</option>
+    </select>
+    <br><br>
+    City: <select name="topic" id="topic">
+      <option value="" selected="selected">Select city</option>
+    </select>
+    <br><br>
+    Neighborhood: <select name="chapter" id="chapter">
+      <option value="" selected="selected">Select neighborhood</option>
+    </select>
+
+    <p class="question textclr">What is the square footage?</p>
+    <input class="question-input textclr" type="number" name="listing_sqft" placeholder="Enter ft2" required="required" />
+
+    <!-- Housing type-->
+    <p class="question textclr">Housing Type?</p>
+    <select name="housing" id="dropdown_option">
+      <option value="housing_house" selected>House</option>
+      <option value="housing_apt">Apartment</option>
+      <option value="housing_condo">Condo</option>
+      <option value="housing_inlaw">In-law/loft</option>
+      <option value="housing_townhouse">Townhouse</option>
+      <option value="housing_flat">Flat</option>
+      <option value="housing_duplex">Duplex</option>
+      <option value="housing_cottage">Cottage/Cabin</option>
+
+    </select>
+
+    <!-- Laundry-->
+    <p class="question textclr">Laundry Options?</p>
+    <select name="laundry" id="dropdown_option">
+      <option value="laundry_in_unit" selected>w/d in unit</option>
+      <option value="laundry_in_bldg">laundry in bldg</option>
+      <option value="laundry_onsite">laundry onsite</option>
+      <option value="laundry_not_onsite">laundry not onsite</option>
+    </select>
+
+    <!-- Parking-->
+    <p class="question textclr">Parking Options?</p>
+    <select name="parking" id="dropdown_option">
+      <option value="parking_carport" selected>carport</option>
+      <option value="parking_attached_garage">attached garage</option>
+      <option value="parking_detached_garage">detached garage</option>
+      <option value="parking_offstreet">off street parking</option>
+      <option value="parking_street">street parking</option>
+      <option value="parking_valet">valet parking</option>
+      <option value="parking_none">no parking</option>
+    </select>
+    <!-- Number of bedrooms-->
+    <p class="question textclr">Number of bedrooms?</p>
+    <select name="no_bedrooms" id="dropdown_option">
+      <option value="0" selected>Studio</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6+</option>
+    </select>
+    <!-- Number of bathrooms-->
+    <p class="question textclr">Number of bathrooms?</p>
+    <select name="no_bathrooms" id="dropdown_option">
+      <option value="shared" selected>Shared</option>
+      <option value="1">1</option>
+      <option value="1.5">1.5</option>
+      <option value="2">2</option>
+      <option value="2.5">2.5</option>
+      <option value="3">3</option>
+      <option value="3.5">3.5</option>
+      <option value="4+">4+</option>
+    </select>
+    <br>
+    <!--  <p class="question textclr">Dummy?</p>
+        <label class="textclr"><input class="radio-input textclr" type="radio" name="0Bedrooms" value="0" required="required" />Studio</label>
+        <label class="textclr"><input class="radio-input textclr" type="radio" name="1Bedrooms" value="1" required="required" />1 Bedroom</label><br>-->
+    <br>
+    <!-- Optional toggles-->
+    <fieldset>
+      <legend>Optional:</legend>
+      <div>
+        <input type="checkbox" id="animals_cats" name="animals_cats" checked>
+        <label for="animals_cats">cats ok</label>
+      </div>
+      <div>
+        <input type="checkbox" id="animals_dogs" name="animals_dogs">
+        <label for="animals_dogs">dogs ok</label>
+      </div>
+      <div>
+        <input type="checkbox" id="pets_allowed" name="pets_allowed">
+        <label for="pets_allowed">are pets allowed? e.g. reptiles</label>
+      </div>
+      <div>
+        <input type="checkbox" id="furnished" name="furnished">
+        <label for="furnished">furnished</label>
+      </div>
+      <div>
+        <input type="checkbox" id="smoking" name="smoking">
+        <label for="smoking">smoking allowed</label>
+      </div>
+      <div>
+        <input type="checkbox" id="wheelchair accessible" name="wheelchair accessible">
+        <label for="wheelchair accessible">wheelchair accessible</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_AC" name="has_AC">
+        <label for="has_AC">air conditioning</label>
+      </div>
+      <div>
+        <input type="checkbox" id="is_rent_controlled" name="is_rent_controlled">
+        <label for="is_rent_controlled">is rent controlled?</label>
+      </div>
+      <div>
+        <input type="checkbox" id="is_an_SRO" name="is_an_SRO">
+        <label for="is_an_SRO">is the property an SRO?</label>
+      </div>
+    </fieldset>
+    <br>
+    <fieldset>
+      <legend>Nice to have:</legend>
+      <div>
+        <input type="checkbox" id="hasEVCharging" name="hasEVCharging">
+        <label for="hasEVCharging">EV charging</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_amenities" name="has_amenities">
+        <label for="has_amenities">has amenities e.g gym, pool</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_premium_finishes" name="has_premium_finishes">
+        <label for="has_premium_finishes">has premium finishes? e.g. marble</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_balcony" name="has_balcony">
+        <label for="has_balcony">are there balconies</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_backyard" name="has_backyard">
+        <label for="has_backyard">has a backyard?</label>
+      </div>
+      <div>
+        <input type="checkbox" id="has_view" name="has_view">
+        <label for="has_view">is there a view?</label>
+      </div>
+      <div>
+        <input type="checkbox" id="multi-level" name="multi-level">
+        <label for="multi-level">is the property multi-level?</label>
+      </div>
+    </fieldset>
+    <p class="question read-more-q textclr">Address?</p>
+    <input class="question-input textclr" name="listing_address" placeholder="Enter address" required="required" />
+    <p class="read-more"><a href="https://www.walkscore.com">
+        Learn more about walkscore</a></p>
+  </form>
+  <button id="button" type="submit" class="btn-submit">Get Results</button>
+  <div id='rent'><!-- Plotly chart will be drawn inside this DIV --></div>
+</main>
+<footer>
+  <p>Meow</p>
+</footer>
+
+</body>
+
+</html>
